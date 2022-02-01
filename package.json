@@ -3,7 +3,7 @@
   "scripts": {
     "start": "node ./server/index.js",
     "debug": "nodemon ./server/index.js",
-    "test": "mocha ./test/unit/**/*$NAME*.js --exit",
+    "test": "mocha ./tests/**/*$NAME*.js --exit",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
   },
   "dependencies": {
