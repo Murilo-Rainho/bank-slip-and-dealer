@@ -11,17 +11,37 @@ const getDateFromDays = (DLArray) => {
 };
 
 const getValue = (DLArray) => {
-  const currency = DLArray[3] === '9' ? 'Real' : 'Dólar';
+  // const currency = DLArray[3] === '9' ? 'Real' : 'Dólar';
 
   const value = Number(DLArray.slice(37, 49).join(''));
 
   const valueFloatFixed = `${(value / 100).toFixed(2)}`;
 
-  const realToDolar = 5.30; // Representa a conversão de real para dólar e vice-versa
+  return valueFloatFixed;
+};
 
-  const resultAmount = currency === 'Real' ? valueFloatFixed : valueFloatFixed * realToDolar;
+const barCodeBankSlip = (DLArray) => {
+  const companyCode = `${DLArray.slice(0, 3).join('')}`;
 
-  return resultAmount;
+  const currencyCode = `${DLArray[3]}`;
+
+  const freeFieldOne = `${DLArray.slice(4, 9).join('')}`;
+
+  const freeFieldTwo = `${DLArray.slice(10, 20).join('')}`;
+
+  const freeFieldThree = `${DLArray.slice(21, 31).join('')}`;
+
+  const barCodeDV = `${DLArray[32]}`;
+
+  const expirationDate = `${DLArray.slice(33, 37).join('')}`;
+
+  const value = `${DLArray.slice(37).join('')}`;
+
+  const requiredField = `${companyCode}${currencyCode}${barCodeDV}${expirationDate}${value}`;
+  
+  const freeField = `${freeFieldOne}${freeFieldTwo}${freeFieldThree}`;
+
+  return `${requiredField}${freeField}`;
 };
 
 const bankCodifier = (digitableLine) => {
@@ -31,10 +51,12 @@ const bankCodifier = (digitableLine) => {
 
   const amount = getValue(DLArray);
 
+  const barCode = barCodeBankSlip(DLArray);
+
   const objectResult = {
     amount,
     expirationDate,
-    barCode: digitableLine,
+    barCode,
   };
 
   return objectResult;

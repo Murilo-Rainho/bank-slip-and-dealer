@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -13,6 +15,6 @@ app.get('/ping', (_req, res, _next) => {
   return res.status(200).send('pong!');
 });
 
-app.use('/boletos', slips);
+app.use('/boleto', slips);
 
 app.listen(PORT, () => console.log(`Listen at port ${PORT}`));
