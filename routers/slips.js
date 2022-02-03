@@ -7,6 +7,7 @@ const {
 const {
   verifyIsAllNumber,
   verifySlipType,
+  checkDVs,
 } = require('../services/middlewares');
 
 const router = Router();
@@ -14,6 +15,7 @@ const router = Router();
 router.get('/:typeableLine',
   verifyIsAllNumber,
   verifySlipType,
+  checkDVs,
   getSlipsController);
 
 module.exports = router;

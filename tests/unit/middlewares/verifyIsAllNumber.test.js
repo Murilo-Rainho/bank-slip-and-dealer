@@ -1,4 +1,9 @@
-const { expect } = require('chai');
+const chai = require('chai');
+const sinonChai = require('sinon-chai');
+
+chai.use(sinonChai);
+
+const { expect } = chai;
 
 const { stub } = require('sinon');
 
@@ -22,20 +27,20 @@ describe('Verify all character of typeable line.', () => {
     message: 'The typeable line should be made up of numbers only'
   };
 
-  // describe('If it\'s all number"', () => {
+  describe('If it\'s all number"', () => {
     
-  //   request.params = {
-  //     typeableLine: '846100000005246100291102005460339004695895061080',
-  //   };
+    request.params = {
+      typeableLine: '846100000005246100291102005460339004695895061080',
+    };
 
 
-  //   it('don\'t return the error object', () => {
-  //     verifyIsAllNumber(request, response, next);
+    it('don\'t return the error object', () => {
+      verifyIsAllNumber(request, response, next);
 
-  //     expect(response.json.calledWith(mockErrorResponse)).to.be.false;
-  //   });
+      expect(next).to.have.been.called;
+    });
 
-  // });
+  });
 
   describe('If it\'s not all number', () => {
     

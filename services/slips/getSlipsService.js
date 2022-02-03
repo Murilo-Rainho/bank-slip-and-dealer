@@ -72,6 +72,6 @@ module.exports = (digitableLine, typeableLineInfo) => {
 
     return objectServiceResponse;
   } catch (error) {
-    throw new Error('Something went wrong');
+    throw new Error(error);
   }
 };
