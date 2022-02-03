@@ -3,8 +3,9 @@
   "scripts": {
     "start": "node ./server/index.js",
     "debug": "nodemon ./server/index.js",
-    "test:integration": "mocha ./tests/integration/*$NAME*.js --exit",
-    "test:unit": "mocha ./tests/unit/**/*$NAME*.js --exit",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:integration": "mocha ./tests/integration/*$NAME*.js --reporter=nyan --exit",
+    "test:unit": "mocha ./tests/unit/**/*$NAME*.js --reporter=nyan --exit",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
   },
   "dependencies": {

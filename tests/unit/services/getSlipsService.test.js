@@ -4,7 +4,7 @@ describe('If getSlipsService', () => {
   
   const { getSlipsService } = require('../../../services/slips');
 
-  describe('recive a valid typeable line of type "bank"', () => {
+  describe('receive a valid typeable line of type "bank"', () => {
 
     const typeableLine = '21290001192110001210904475617405975870000002000';
     const typeableLineInfo = { type: 'bank' }; 
@@ -34,16 +34,17 @@ describe('If getSlipsService', () => {
     
   });
 
-  describe('recive an invalid typeable line', () => {
+  describe('receive an invalid typeable line', () => {
 
-    const typeableLine = '21290001192110001210904475617405975870000002000';
-    const typeableLineInfo = { type: 'bank' }; 
+    const typeableLineInfo = { type: 'bank' };
 
     const mockResult = {
       message: 'This typeable line has no valid bar code DV',
     };
 
     describe('without second param (typeableLineInfo)', () => {
+
+      const typeableLine = '21290001192110001210904475617405975870000002000';
 
       it('return an error object with the correct key "message"', () => {
         const serviceResult = getSlipsService(typeableLine);
@@ -55,8 +56,10 @@ describe('If getSlipsService', () => {
     
     describe('that has a invalid bar code DV', () => {
       
+      const typeableLine = '21290001192110001210904475617405875870000002000';
+
       it('return an error object with the correct key "message"', () => {
-        const serviceResult = getSlipsService(typeableLine);
+        const serviceResult = getSlipsService(typeableLine, typeableLineInfo);
   
         expect(serviceResult).to.deep.equal(mockResult);
       });
