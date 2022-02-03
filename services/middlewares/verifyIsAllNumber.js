@@ -1,7 +1,7 @@
 module.exports = (req, res, next) => {
   const { typeableLine } = req.params;
 
-  const typeableLineArray = typeableLine.split();
+  const typeableLineArray = typeableLine.split('');
   
   typeableLineArray.forEach((character) => {
     if (isNaN(Number(character))) {

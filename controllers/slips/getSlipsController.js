@@ -5,9 +5,13 @@ module.exports = (req, res, next) => {
     const { typeableLine } = req.params;
     const { typeableLineInfo } = req;
   
-    const serviceResponse = getSlipsService(typeableLine, typeableLineInfo);
+    const { data, message } = getSlipsService(typeableLine, typeableLineInfo);
 
-    return res.status(200).json(serviceResponse);
+    if (message) {
+      return res.status(400).json({ message });
+    }
+
+    return res.status(200).json(data);
   } catch (error) {
     next(error)
   }
