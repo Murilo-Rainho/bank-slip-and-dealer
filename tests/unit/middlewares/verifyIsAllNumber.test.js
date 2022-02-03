@@ -8,10 +8,8 @@ const { expect } = chai;
 const { stub } = require('sinon');
 
 const response = {};
-const request = {};
+let request = {};
 let next = () => {};
-
-const throwError = new Error('something went wrong');
 
 describe('Verify all character of typeable line.', () => {
 
@@ -22,19 +20,20 @@ describe('Verify all character of typeable line.', () => {
     response.json = stub().returns();
     next = stub().returns();
   });
-  
-  const mockErrorResponse = {
-    message: 'The typeable line should be made up of numbers only'
-  };
+
+  after(() => {
+    request = {};
+  });
 
   describe('If it\'s all number"', () => {
-    
-    request.params = {
-      typeableLine: '846100000005246100291102005460339004695895061080',
-    };
 
+    before(() => {
+      request.params = {
+        typeableLine: '21290001192110001210904475617405975870000002000',
+      };
+    });
 
-    it('don\'t return the error object', () => {
+    it('the "next" function has been called', () => {
       verifyIsAllNumber(request, response, next);
 
       expect(next).to.have.been.called;
@@ -43,15 +42,27 @@ describe('Verify all character of typeable line.', () => {
   });
 
   describe('If it\'s not all number', () => {
-    
-    request.params = {
-      typeableLine: '212900011a2110001210904#75617405975870^00002000',
-    };
+
+    before(() => {
+      request.params = {
+        typeableLine: '212900011921100012109044756174^5975870000002000',
+      };
+    });
 
     it('return the error object', () => {
+      const mockErrorResponse = {
+        message: 'The typeable line should be made up of numbers only'
+      };
+
       verifyIsAllNumber(request, response, next);
 
       expect(response.json.calledWith(mockErrorResponse)).to.be.true;
+    });
+
+    it('the status http has called with the code "400"', () => {
+      verifyIsAllNumber(request, response, next);
+      
+      expect(response.status.calledWith(400)).to.be.true;
     });
 
   });

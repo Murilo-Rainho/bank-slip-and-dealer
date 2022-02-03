@@ -11,8 +11,6 @@ const response = {};
 let request = {};
 let next = () => {};
 
-const throwError = new Error('something went wrong');
-
 describe('Verify what is the type of the slip.', () => {
 
   const { verifySlipType } = require('../../../services/middlewares');
@@ -26,55 +24,75 @@ describe('Verify what is the type of the slip.', () => {
   after(() => {
     request = {};
   });
-
-  const mockErrorResponse = {
-    message: 'This typeable line is not valid',
-  };
   
-  // describe('If the type is "dealer"', () => {
-    
-  //   request.params = {
-  //     typeableLine: '846100000005246100291102005460339004695895061080',
-  //   };
+  describe('If the type is "dealer"', () => {
 
-  //   it('don\'t return the error object', () => {
-  //     verifySlipType(request, response, next);
+    before(() => {
+      request.params = {
+        typeableLine: '846100000005246100291102005460339004695895061080',
+      };
+    });
 
-  //     expect(next).to.have.been.called;
-  //   });
-
-  // });
-
-  describe.only('If the type is "bank"', () => {
-    
-    request.params = {
-      typeableLine: '21290001192110001210904475617405975870000002000',
-    };
-
-    it('don\'t return the error object', () => {
+    it('the "next" has been called', () => {
       verifySlipType(request, response, next);
-
-      console.log('1', request);
 
       expect(next).to.have.been.called;
     });
 
+    it('a key named "typeableLineInfo" is added to request, with value "dealer"', () => {
+      verifySlipType(request, response, next);
+
+      expect(request.typeableLineInfo.type).to.deep.equal('dealer');
+    });
+
   });
 
-  // describe('If is an invalid typeable line', () => {
-    
-  //   request.params = {
-  //     typeableLine: '123',
-  //   };
+  describe('If the type is "bank"', () => {
 
-  //   it('returns an object error with the key "message", with value "This typeable line is not valid"', () => {
-  //     verifySlipType(request, response, next);
+    before(() => {
+      request.params = {
+        typeableLine: '21290001192110001210904475617405975870000002000',
+      };
+    });
 
-  //     console.log('2', request);
+    it('the "next" has been called', () => {
+      verifySlipType(request, response, next);
 
-  //     expect(response.json.calledWith(mockErrorResponse)).to.be.true;
-  //   });
+      expect(next).to.have.been.called;
+    });
 
-  // });
+    it('a key named "typeableLineInfo" is added to request, with value "bank"', () => {
+      verifySlipType(request, response, next);
+
+      expect(request.typeableLineInfo.type).to.deep.equal('bank');
+    });
+
+  });
+
+  describe('If is an invalid typeable line', () => {
+
+    before(() => {
+      request.params = {
+        typeableLine: '123',
+      };
+    });
+
+    it('returns an object error with the key "message", with value "This typeable line is not valid"', () => {
+      const mockErrorResponse = {
+        message: 'This typeable line is not valid',
+      };
+
+      verifySlipType(request, response, next);
+
+      expect(response.json.calledWith(mockErrorResponse)).to.be.true;
+    });
+
+    it('the status http has called with the code "400"', () => {
+      verifySlipType(request, response, next);
+      
+      expect(response.status.calledWith(400)).to.be.true;
+    });
+
+  });
 
 });

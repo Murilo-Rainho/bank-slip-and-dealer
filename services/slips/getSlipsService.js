@@ -11,8 +11,6 @@ const getDateFromDays = (DLArray) => {
 };
 
 const getValue = (DLArray) => {
-  // const currency = DLArray[3] === '9' ? 'Real' : 'Dólar';
-
   const value = Number(DLArray.slice(37, 49).join(''));
 
   const valueFloatFixed = `${(value / 100).toFixed(2)}`;
@@ -44,8 +42,8 @@ const barCodeBankSlip = (DLArray) => {
   return `${requiredField}${freeField}`;
 };
 
-const bankCodifier = (digitableLine) => {
-  const DLArray = digitableLine.split('');
+const bankCodifier = (typeableLine) => {
+  const DLArray = typeableLine.split('');
 
   const expirationDate = getDateFromDays(DLArray);
 
@@ -94,22 +92,18 @@ const validateDVBarCode = (barCode) => {
   return isValid;
 };
 
-module.exports = (digitableLine, typeableLineInfo) => {
-  try {
-    let objectServiceResponse = {};
+module.exports = (typeableLine = '', typeableLineInfo = {}) => {
+  let objectServiceResponse = {};
+  let validate;
 
-    if (typeableLineInfo.type === 'bank') {
-      objectServiceResponse = bankCodifier(digitableLine);      
-    }
-
-    const validate = validateDVBarCode(objectServiceResponse.barCode);
-
-    if (!validate) {
-      return { message: 'This typeable line has no valid bar code DV' };
-    }
-
-    return { data: objectServiceResponse };
-  } catch (error) {
-    throw new Error(error);
+  if (typeableLineInfo.type === 'bank') {
+    objectServiceResponse = bankCodifier(typeableLine);  
+    validate = validateDVBarCode(objectServiceResponse.barCode);    
   }
+
+  if (!validate) {
+    return { message: 'This typeable line has no valid bar code DV' };
+  }
+
+  return { data: objectServiceResponse };
 };
