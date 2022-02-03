@@ -62,6 +62,38 @@ const bankCodifier = (digitableLine) => {
   return objectResult;
 };
 
+const validateDVBarCode = (barCode) => {
+  const DVBarCode = Number(barCode[4]);
+
+  const barCodeWithoutDV = `${barCode.slice(0, 4)}${barCode.slice(5)}`;
+
+  const barCodeInverted = barCodeWithoutDV.split('').slice(0).reverse();
+
+  let multiplier = 1;
+
+  const summedNumbers = barCodeInverted.reduce((acc, curr) => {
+    multiplier += 1;
+
+    if (multiplier >= 10) multiplier = 2
+
+    const product = multiplier * curr;
+
+    return product + acc;
+  }, 0);
+
+  const restNumber = summedNumbers % 11;
+
+  let validateDV = 11 - restNumber;
+
+  if (validateDV === 0) validateDV = 1;
+  if (validateDV == 10) validateDV = 1;
+  if (validateDV == 11) validateDV = 1;
+
+  const isValid = validateDV === DVBarCode ? true : false;
+
+  return isValid;
+};
+
 module.exports = (digitableLine, typeableLineInfo) => {
   try {
     let objectServiceResponse = {};
@@ -70,7 +102,13 @@ module.exports = (digitableLine, typeableLineInfo) => {
       objectServiceResponse = bankCodifier(digitableLine);      
     }
 
-    return objectServiceResponse;
+    const validate = validateDVBarCode(objectServiceResponse.barCode);
+
+    if (!validate) {
+      return { message: 'This typeable line has no valid bar code DV' };
+    }
+
+    return { data: objectServiceResponse };
   } catch (error) {
     throw new Error(error);
   }
