@@ -1,4 +1,4 @@
-const getFields = (typeableLine) => {
+const getFieldsBankSlip = (typeableLine) => {
   const fieldOne = typeableLine.slice(0, 9).split(''); // cria um array com os dígitos do primeiro campo, sem o dígito verificador
   fieldOne.reverse(); // inverte o array, por conta da regra de negócio da multiplicação dos carácteres, da direita para a esquerda
 
@@ -11,10 +11,31 @@ const getFields = (typeableLine) => {
   return [fieldOne, fieldTwo, fieldThree];
 };
 
-const getDVs = (typeableLine) => { // pega os dígitos verificadores dos campos 1, 2 e 3
+const getDVsBankSlip = (typeableLine) => { // pega os dígitos verificadores dos campos 1, 2 e 3
   const dvOne = Number(typeableLine[9]);
   const dvTwo = Number(typeableLine[20]);
   const dvThree = Number(typeableLine[31]);
+
+  return [dvOne, dvTwo, dvThree];
+};
+
+const getFieldsDealerSlip = (typeableLine) => {
+  const fieldOne = typeableLine.slice(0, 11).split(''); // cria um array com os dígitos do primeiro campo, sem o dígito verificador
+  fieldOne.reverse(); // inverte o array, por conta da regra de negócio da multiplicação dos carácteres, da direita para a esquerda
+
+  const fieldTwo = typeableLine.slice(12, 23).split(''); // cria um array com os dígitos do segundo campo, sem o dígito verificador
+  fieldTwo.reverse(); // inverte o array, por conta da regra de negócio da multiplicação dos carácteres, da direita para a esquerda
+
+  const fieldThree = typeableLine.slice(24, 35).split(''); // cria um array com os dígitos do terceiro campo, sem o dígito verificador
+  fieldThree.reverse(); // inverte o array, por conta da regra de negócio da multiplicação dos carácteres, da direita para a esquerda
+
+  return [fieldOne, fieldTwo, fieldThree];
+};
+
+const getDVsDealerSlip = (typeableLine) => {
+  const dvOne = Number(typeableLine[11]);
+  const dvTwo = Number(typeableLine[23]);
+  const dvThree = Number(typeableLine[35]);
 
   return [dvOne, dvTwo, dvThree];
 };
@@ -56,11 +77,25 @@ const calculationDVModuleTeen = (invertedFieldArray) => {
 };
 
 module.exports = (req, res, next) => {
-  const { typeableLine } = req.params;
+  const {
+    params: { typeableLine },
+    typeableLineInfo: { type },
+  } = req;
 
-  const invertedFields = getFields(typeableLine);
+  let invertedFields;
+  let allDVs;
 
-  const allDVs = getDVs(typeableLine);
+  if (type === 'bank') {
+    invertedFields = getFieldsBankSlip(typeableLine);
+  
+    allDVs = getDVsBankSlip(typeableLine);
+  }
+
+  if (type === 'dealer') {
+    invertedFields = getFieldsDealerSlip(typeableLine);
+  
+    allDVs = getDVsDealerSlip(typeableLine);
+  }
 
   let validate = true;
 
