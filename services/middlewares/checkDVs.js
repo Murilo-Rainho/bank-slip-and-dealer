@@ -56,11 +56,20 @@ const calculationDVModuleTeen = (invertedFieldArray) => {
 };
 
 module.exports = (req, res, next) => {
-  const { typeableLine } = req.params;
+  const {
+    params: { typeableLine },
+    typeableLineInfo: { type },
+  } = req;
 
-  const invertedFields = getFields(typeableLine);
+  let invertedFields;
+  let allDVs;
 
-  const allDVs = getDVs(typeableLine);
+  if (type === 'bank') {
+    invertedFields = getFields(typeableLine);
+  
+    allDVs = getDVs(typeableLine);
+  }
+
 
   let validate = true;
 
