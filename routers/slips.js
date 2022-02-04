@@ -15,7 +15,7 @@ const router = Router();
 router.get('/:typeableLine',
   verifyIsAllNumber,
   verifySlipType,
-  // checkDVs,
+  checkDVs,
   getSlipsController);
 
 module.exports = router;
