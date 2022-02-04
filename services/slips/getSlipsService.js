@@ -124,19 +124,19 @@ const dealerCodifier = (typeableLine) => {
   // mais fácil de manipular os dados
   const DLArray = typeableLine.split('');
 
-  // const dateTime = Number(DLArray.slice(33, 37).join(''));
-
-  // const expirationDate = getDateFromDays(dateTime);
-
-  // const value = Number(DLArray.slice(37, 49).join(''));
-
-  // const amount = getValue(value);
-
   const barCode = barCodeDealerSlip(DLArray);
 
+  const dateTime = Number(barCode.split('').slice(14, 18).join(''));
+
+  const expirationDate = getDateFromDays(dateTime);
+
+  const value = Number(barCode.split('').slice(4, 14).join(''));
+
+  const amount = getValue(value);
+
   return {
-    // amount,
-    // expirationDate,
+    amount,
+    expirationDate,
     barCode,
   };
 };
@@ -163,6 +163,7 @@ module.exports = (typeableLine = '', typeableLineInfo = {}) => {
 
     const DVBarCode = Number(typeableLine[47]);
 
+    // retira o DV do código de barras
     const barCodeWithoutDV = typeableLine.split('').slice(0, 47).join('');
 
     validate = validateDVBarCode(barCodeWithoutDV, DVBarCode, typeableLineInfo.type);
@@ -174,5 +175,3 @@ module.exports = (typeableLine = '', typeableLineInfo = {}) => {
 
   return { data: objectServiceResponse };
 };
-
-// console.log('856900000584030100649158110347945609001374691358'.split('').slice(0, 47).join(''));
