@@ -29,7 +29,7 @@ describe('Verify what is the type of the slip.', () => {
 
     before(() => {
       request.params = {
-        typeableLine: '846100000005246100291102005460339004695895061080',
+        typeableLine: '856900000584030100649158110347945609001374691358',
       };
     });
 
