@@ -57,10 +57,10 @@
   - [x] Verificar se foi passado uma linha digitável correta;
   - [x] Validar os dígitos verificáveis (módulo 10);
   - [x] validar o dígito verificável geral do código de barras (módulo 11);
-- [ ] Validações para os boletos de concessionárias;
-  - [ ] Verificar se foi passado uma linha digitável correta;
-  - [ ] Validar os dígitos verificáveis;
-  - [ ] validar o dígito verificável geral do código de barras;
+- [x] Validações para os boletos de concessionárias;
+  - [x] Verificar se foi passado uma linha digitável correta;
+  - [x] Validar os dígitos verificáveis;
+  - [x] validar o dígito verificável geral do código de barras;
 - [x] Testes unitários;
 - [x] Testes de integração;
 
