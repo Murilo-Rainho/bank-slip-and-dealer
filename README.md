@@ -59,8 +59,8 @@
   - [x] validar o dígito verificável geral do código de barras (módulo 11);
 - [x] Validações para os boletos de concessionárias;
   - [x] Verificar se foi passado uma linha digitável correta;
-  - [x] Validar os dígitos verificáveis;
-  - [x] validar o dígito verificável geral do código de barras;
+  - [x] Validar os dígitos verificáveis (módulo 10);
+  - [x] validar o dígito verificável geral do código de barras (módulo 11);
 - [x] Testes unitários;
 - [x] Testes de integração;
 
