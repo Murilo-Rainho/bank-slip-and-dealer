@@ -67,5 +67,69 @@ describe('If getSlipsService', () => {
     });
         
   });
+
+  describe('receive a valid typeable line of type "dealer"', () => {
+
+    const typeableLine = '856900000584030100649158110347945609001374691358';
+    const typeableLineInfo = { type: 'dealer' }; 
+
+    const mockResult = {
+      data: {
+        amount: '580.30',
+        expirationDate: '2000-07-09',
+        barCode: '85690000058030100649151103479456000137469135'
+      },
+    };
+    
+    it('return a object with a key "data" that has keys "amount", "expirationDate" and "barCode"', () => {
+      const serviceResult = getSlipsService(typeableLine, typeableLineInfo);
+
+      expect(serviceResult).to.have.own.property('data');
+      expect(serviceResult.data).to.have.own.property('amount');
+      expect(serviceResult.data).to.have.own.property('expirationDate');
+      expect(serviceResult.data).to.have.own.property('barCode');
+    });
+
+    it('return a object with a key "data" that has the correct values', () => {
+      const serviceResult = getSlipsService(typeableLine, typeableLineInfo);
+
+      expect(serviceResult).to.deep.equal(mockResult);
+    });
+    
+  });
+
+  describe('receive an invalid typeable line', () => {
+
+    const typeableLineInfo = { type: 'bank' };
+
+    const mockResult = {
+      message: 'This typeable line has no valid bar code DV',
+    };
+
+    describe('without second param (typeableLineInfo)', () => {
+
+      const typeableLine = '856900000584030110649158110347945609001374691358';
+
+      it('return an error object with the correct key "message"', () => {
+        const serviceResult = getSlipsService(typeableLine);
+  
+        expect(serviceResult).to.deep.equal(mockResult);
+      });
+
+    });
+    
+    describe('that has a invalid bar code DV', () => {
+      
+      const typeableLine = '856900000584030100649158110347945609001374691357';
+
+      it('return an error object with the correct key "message"', () => {
+        const serviceResult = getSlipsService(typeableLine, typeableLineInfo);
+  
+        expect(serviceResult).to.deep.equal(mockResult);
+      });
+      
+    });
+        
+  });
   
 });
